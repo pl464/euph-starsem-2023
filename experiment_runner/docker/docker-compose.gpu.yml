@@ -1,0 +1,20 @@
+services:
+  trainer:
+    image: vet_trainer_gpu:latest
+    build:
+      context: ./
+      dockerfile: docker/Dockerfile.gpu
+    volumes:
+      - ./src:/app/src
+      - ./models:/app/models
+      - ./corpora:/app/corpora
+    environment:
+      - MODEL_DIR=/app/models # this is the directory where the model will be saved
+      - CORPUS_DIR=/app/corpora # this is the directory where to put corpus files
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

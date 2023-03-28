@@ -1,0 +1,23 @@
+FROM huggingface/transformers-pytorch-gpu:latest
+
+# install python 3.8 because we are no longer in the stone age
+RUN apt update && \
+    apt install software-properties-common -y && \
+    add-apt-repository ppa:deadsnakes/ppa && \
+    apt install python3.8 -y
+
+WORKDIR /app
+
+COPY . .
+
+# reinstall dependencies lmao
+RUN python3.8 -m pip install --upgrade pip
+RUN python3.8 -m pip install \
+    torch \
+    torchvision \
+    torchaudio \
+    --extra-index-url https://download.pytorch.org/whl/cu116
+RUN python3.8 -m pip install --no-cache-dir -r requirements.txt
+
+# run trainer
+CMD ["python3.8", "src/iterator.py"]
