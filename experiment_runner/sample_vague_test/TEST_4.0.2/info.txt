@@ -1,0 +1,4 @@
+The smallest group is 208 examples. Training set will have 332 of each label; test set will have 84 of each label
+The training set will have 664 total examples; the test set, 168, for a total of 832 examples
+
+CUSTOM NOTES: 10 more tests. Strong assumption vagueness labels, includes all examples. Train and test sets are balanced for is_euph and is_vague. RoBERTa. No punctuation.
