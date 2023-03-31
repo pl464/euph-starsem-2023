@@ -1,0 +1,20 @@
+INSTRUCTIONS FOR USING THIS TO RUN MULTIPLE BERT EXPERIMENTS.
+
+Firstly, make sure src/manifest.txt and src/train.py are configured properly. (Note that on the HPC, there APPEAR to be 4 "cores", so per_device_batch_size should be 4, if you want a batch size of 16.)
+Then, put your train/test files into the corpora folder. Note that, as is, they must be named "hf_train_x.csv", "hf_test_x.csv", where x can be a useful ID number.
+Reset (delete) the results.csv file from last run, if needed.
+
+== CMD LINE ==
+1. Activate the virtual environment using `python3 -m venv .venv; source .venv/bin/activate`
+2. Navigate to the directory (this directory).
+3. `make run-local` starts the training.
+4. Various output metrics are recorded, per epoch, in results.txt.
+
+== HOW IT WORKS ==
+1. `make run-local` calls the appropriate Make command from the Makefile (think of it as setting up the files). In this case, `sh local/run.sh` runs the script `run.sh` in `local`.
+2. `run.sh` installs dependencies (in the virtual environment you activated in step 1). Then, it calls `iterator.py`, a script in the `src` directory.
+3. Specify the model name ("bert-base", etc.) in `iterator.py`. This file iterates through your test items, specified in `manifest.py`, and applies run_trainer() from `train.py` on them.
+4. `train.py` is where the HuggingFace training settings are. Data is tokenized, trained on, and used for evaluation. In compute_metrics(), metrics from each epoch are output to an external file `results.csv` for further analysis.
+
+
+
